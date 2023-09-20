@@ -1,0 +1,38 @@
+import requests
+from bs4 import BeautifulSoup
+
+# Define the URL of the college admission page
+url = 'https://vnrvjiet.ac.in/admission/'
+
+# Send an HTTP GET request to the URL
+response = requests.get(url)
+
+if response.status_code == 200:
+    # Parse the HTML content
+    soup = BeautifulSoup(response.text, 'html.parser')
+
+    # Extract relevant information (replace with actual scraping logic)
+    admission_info = soup.find('div', class_='admission-info').get_text()
+    deadlines = soup.find('ul', class_='deadlines').find_all('li')
+
+    # Convert information into question-answer pairs
+    qna_pairs = []
+
+    # Example Q&A generation (replace with actual logic)
+    qna_pairs.append({
+        'question': 'What are the admission requirements?',
+        'answer': admission_info
+    })
+
+    for deadline in deadlines:
+        qna_pairs.append({
+            'question': 'What is the deadline for ' + deadline.find('strong').get_text() + '?',
+            'answer': deadline.get_text()
+        })
+
+    # Print or store the question-answer pairs
+    for qna_pair in qna_pairs:
+        print('Question:', qna_pair['question'])
+        print('Answer:', qna_pair['answer'])
+else:
+    print('Failed to retrieve the web page.')
