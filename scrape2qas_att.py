@@ -34,7 +34,8 @@ answer_sequences = tokenizer.texts_to_sequences(answers)
 MAX_SEQUENCE_LENGTH = 2
 passage_sequences = pad_sequences([passage_sequences], padding='post', maxlen=MAX_SEQUENCE_LENGTH)[0]
 question_sequences = pad_sequences(question_sequences, padding='post', maxlen=MAX_SEQUENCE_LENGTH)
-answer_sequences = pad_sequences(answer_sequences, padding='post', maxlen=MAX_SEQUENCE_LENGTH)
+# answer_sequences = pad_sequences(answer_sequences, padding='post', maxlen=MAX_SEQUENCE_LENGTH)
+answer_sequences = np.expand_dims(answer_sequences, axis=2)
 
 # Build the model
 embedding_dim = 256
@@ -59,7 +60,7 @@ decoder_concat = tf.concat([decoder_outputs, attention], axis=-1)
 
 # TimeDistributed layer to predict two values at each time step
 decoder_dense = Dense(2, activation='softmax')
-output = decoder_dense(decoder_concat)                                                                                                                                              
+output = decoder_dense(decoder_concat)                                                                                                                                             
 print(output.shape)
 
 model = Model([encoder_inputs, decoder_inputs], output)
